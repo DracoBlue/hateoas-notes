@@ -1,0 +1,33 @@
+{
+  "name": "hateoas-notes",
+  "description": "Notes api application written in several hypermedia apis.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node_modules/mocha/bin/mocha",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DracoBlue/hateoas-notes.git"
+  },
+  "keywords": [
+    "hateoas",
+    "rest",
+    "hal",
+    "siren",
+    "uber",
+    "json-hc",
+    "collection+json",
+    "mason",
+    "json-ld"
+  ],
+  "author": "DracoBlue <JanS@DracoBlue.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DracoBlue/hateoas-notes/issues"
+  },
+  "homepage": "https://github.com/DracoBlue/hateoas-notes",
+  "devDependencies": {
+    "mocha": "^2.2.4"
+  }
+}
