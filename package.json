@@ -29,5 +29,8 @@
   "homepage": "https://github.com/DracoBlue/hateoas-notes",
   "devDependencies": {
     "mocha": "^2.2.4"
+  },
+  "dependencies": {
+    "express": "^4.9.0"
   }
 }
