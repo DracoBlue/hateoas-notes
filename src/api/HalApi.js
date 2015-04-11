@@ -61,7 +61,9 @@ module.exports = function(notes) {
 
 	api.post('/notes', function(req, res) {
 		notes.createNote(req.body, function(err, note) {
-			res.send(JSON.stringify(note.toJSON()));
+			res.statusCode = 201;
+			res.setHeader('Location', req.generateUrl("/notes/" + note.getId()));
+			res.end();
 		});
 	});
 
