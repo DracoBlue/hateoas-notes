@@ -9,7 +9,9 @@ module.exports = function(notes) {
 		res.set('Content-Type', 'application/hal+json');
 		req.generateUrl = function(path) {
 			var urlParts = url.parse(req.protocol + '://' + req.headers['host']);
-			return req.protocol + '://' + req.hostname + ( urlParts.port == 80 || urlParts.port == 443 ? '' : ':' + urlParts.port ) + req.baseUrl + path;
+			var port = parseInt(req.headers['x-forwarded-port'] ||  urlParts.port, 10);
+			var protocol = req.headers['x-forwarded-proto'] || req.protocol;
+			return protocol + '://' + req.hostname + ( port == 80 || port == 443 ? '' : ':' + port ) + req.baseUrl + path;
 		};
 		next();
 	});
