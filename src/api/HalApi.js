@@ -25,6 +25,16 @@ module.exports = function(notes) {
 		}));
 	});
 
+	var noteToHal = function(req, note) {
+		var halNote = note.toJSON();
+		halNote["_links"] = {
+			"self": {"href": req.generateUrl("/notes/" + note.getId())},
+			"up": {"href": req.generateUrl("/notes")}
+		};
+
+		return halNote;
+	};
+
 	api.get('/notes', function(req, res) {
 		var offset = parseInt(req.query.offset || 0, 10);
 		var limit = parseInt(req.query.limit || 20, 10);
@@ -34,11 +44,7 @@ module.exports = function(notes) {
 			notes.splice(limit, 1);
 
 			notes.forEach(function(note) {
-				var halNote = note.toJSON();
-				halNote["_links"] = {
-					"self": {"href": req.generateUrl("/notes/" + note.getId())}
-				};
-				halNotes.push(halNote);
+				halNotes.push(noteToHal(req, note));
 			});
 
 			var halResponse = {
@@ -69,7 +75,7 @@ module.exports = function(notes) {
 
 	api.get('/notes/:id', function(req, res) {
 		notes.getNoteById(req.params.id, function(err, note) {
-			res.send(JSON.stringify(note.toJSON()));
+			res.send(JSON.stringify(noteToHal(req, note)));
 		});
 	});
 
