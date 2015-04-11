@@ -3,10 +3,20 @@
 module.exports = function(notes) {
 	notes.createNotes([
 		{
-			"title": "Apples"
+			"title": "Apples",
+			"tags": ["fruits"]
 		},
 		{
-			"title": "Watermelon"
+			"title": "Watermelon",
+			"tags": ["fruits"]
+		},
+		{
+			"title": "Brave New World",
+			"tags": ["books"]
+		},
+		{
+			"title": "Lord of flies",
+			"tags": ["books"]
 		}
 	], function() {
 
