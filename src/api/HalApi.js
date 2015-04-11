@@ -19,8 +19,8 @@ module.exports = function(notes) {
 	api.get('/', function(req, res) {
 		res.send(JSON.stringify({
 			"_links": {
-				"http://hateoas-notes/rels/notes": req.generateUrl('/notes'),
-				"http://hateoas-notes/rels/create-note": req.generateUrl('/notes')
+				"http://hateoas-notes/rels/notes": {"href": req.generateUrl('/notes')},
+				"http://hateoas-notes/rels/create-note": {"href": req.generateUrl('/notes')}
 			}
 		}));
 	});
@@ -36,14 +36,14 @@ module.exports = function(notes) {
 			notes.forEach(function(note) {
 				var halNote = note.toJSON();
 				halNote["_links"] = {
-					"self": req.generateUrl("/notes/" + note.getId())
+					"self": {"href": req.generateUrl("/notes/" + note.getId())}
 				};
 				halNotes.push(halNote);
 			});
 
 			var halResponse = {
 				"_links": {
-					"first": req.generateUrl('/notes?offset=0&limit=' + limit)
+					"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)}
 				},
 				"_embedded": {
 					"http://hateoas-notes/rels/note": halNotes
@@ -52,7 +52,7 @@ module.exports = function(notes) {
 
 			if (hasNextPage)
 			{
-				halResponse["_links"].next = req.generateUrl('/notes?offset=' + (limit + offset) + '&limit=' + limit);
+				halResponse["_links"].next = {"href": req.generateUrl('/notes?offset=' + (limit + offset) + '&limit=' + limit)};
 			}
 
 			res.send(JSON.stringify(halResponse));
@@ -68,8 +68,6 @@ module.exports = function(notes) {
 	});
 
 	api.get('/notes/:id', function(req, res) {
-		//res.set('Content-Type', 'application/json');
-
 		notes.getNoteById(req.params.id, function(err, note) {
 			res.send(JSON.stringify(note.toJSON()));
 		});
