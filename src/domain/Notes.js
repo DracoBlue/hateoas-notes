@@ -15,6 +15,21 @@ Notes.prototype.getNoteById = function(id, callback)
 	}));
 };
 
+Notes.prototype.countNotes = function(callback)
+{
+	var totalCount = 0;
+
+	for (var id in this.notes)
+	{
+		if (this.notes.hasOwnProperty(id))
+		{
+			totalCount++;
+		}
+	}
+
+	callback(false, totalCount);
+};
+
 Notes.prototype.getNotesByOffsetAndLimit = function(offset, limit, callback)
 {
 	var index = 0;
