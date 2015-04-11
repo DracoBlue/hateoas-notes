@@ -10,9 +10,14 @@ var Notes = function()
 
 Notes.prototype.getNoteById = function(id, callback)
 {
-	callback(false, new Note({
-		"id": id
-	}));
+	if (this.notes[id])
+	{
+		callback(false, new Note(this.notes[id]));
+	}
+	else
+	{
+		callback(true);
+	}
 };
 
 Notes.prototype.countNotes = function(callback)
