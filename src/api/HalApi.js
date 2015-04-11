@@ -53,7 +53,8 @@ module.exports = function(notes) {
 
 			var halResponse = {
 				"_links": {
-					"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)}
+					"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)},
+					"up": {"href": req.generateUrl("/")}
 				},
 				"_embedded": {
 					"http://hateoas-notes/rels/note": halNotes
