@@ -88,7 +88,17 @@ module.exports = function(notes) {
 
 	api.get('/notes/:id', function(req, res) {
 		notes.getNoteById(req.params.id, function(err, note) {
-			res.send(JSON.stringify(noteToHal(req, note)));
+			if (err)
+			{
+				res.statusCode = 404;
+				res.send(JSON.stringify({
+					"message": "Note with id: " + req.params.id + " not found!"
+				}));
+			}
+			else
+			{
+				res.send(JSON.stringify(noteToHal(req, note)));
+			}
 		});
 	});
 
