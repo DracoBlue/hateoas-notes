@@ -42,31 +42,36 @@ module.exports = function(notes) {
 	api.get('/notes', function(req, res) {
 		var offset = parseInt(req.query.offset || 0, 10);
 		var limit = parseInt(req.query.limit || 20, 10);
-		notes.getNotesByOffsetAndLimit(offset, limit + 1, function(err, notes) {
-			var halNotes = [];
-			var hasNextPage = notes.length > limit ? true : false;
-			notes.splice(limit, 1);
 
-			notes.forEach(function(note) {
-				halNotes.push(noteToHal(req, note));
-			});
+		notes.countNotes(function(err, totalCount) {
+			notes.getNotesByOffsetAndLimit(offset, limit + 1, function(err, notes) {
+				var halNotes = [];
+				var hasNextPage = notes.length > limit ? true : false;
+				notes.splice(limit, 1);
 
-			var halResponse = {
-				"_links": {
-					"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)},
-					"up": {"href": req.generateUrl("/")}
-				},
-				"_embedded": {
-					"http://hateoas-notes/rels/note": halNotes
+				notes.forEach(function(note) {
+					halNotes.push(noteToHal(req, note));
+				});
+
+				var halResponse = {
+					"_links": {
+						"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)},
+						"self": {"href": req.generateUrl('/notes?offset=' + offset + '&limit=' + limit)},
+						"up": {"href": req.generateUrl("/")},
+						"last": {"href": req.generateUrl('/notes?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)}
+					},
+					"_embedded": {
+						"http://hateoas-notes/rels/note": halNotes
+					}
+				};
+
+				if (hasNextPage)
+				{
+					halResponse["_links"].next = {"href": req.generateUrl('/notes?offset=' + (limit + offset) + '&limit=' + limit)};
 				}
-			};
 
-			if (hasNextPage)
-			{
-				halResponse["_links"].next = {"href": req.generateUrl('/notes?offset=' + (limit + offset) + '&limit=' + limit)};
-			}
-
-			res.send(JSON.stringify(halResponse));
+				res.send(JSON.stringify(halResponse));
+			});
 		});
 	});
 
