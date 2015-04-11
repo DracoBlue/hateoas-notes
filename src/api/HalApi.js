@@ -7,6 +7,10 @@ module.exports = function(notes) {
 
 	api.use(function(req, res, next) {
 		res.set('Content-Type', 'application/hal+json');
+		res.set('Access-Control-Allow-Origin', '*');
+		res.set('Access-Control-Allow-Credentials', 'true');
+		res.set('Access-Control-Allow-Methods', '*');
+		res.set('Access-Control-Allow-Headers', '*');
 		req.generateUrl = function(path) {
 			var urlParts = url.parse(req.protocol + '://' + req.headers['host']);
 			var port = parseInt(req.headers['x-forwarded-port'] ||  urlParts.port, 10);
