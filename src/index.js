@@ -1,12 +1,8 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var app = express();
 
 var Notes = require('./domain/Notes');
 var notes = new Notes();
-
-// parse application/json
-app.use(bodyParser.json())
 
 var TestData = require('./TestData');
 TestData(notes);

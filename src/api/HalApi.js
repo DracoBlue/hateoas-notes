@@ -3,7 +3,10 @@
 module.exports = function(notes) {
 	var express = require('express');
 	var url = require('url');
+	var bodyParser = require('body-parser');
 	var api = express.Router();
+
+	api.use(bodyParser.json())
 
 	api.use(function(req, res, next) {
 		res.set('Content-Type', 'application/hal+json');
