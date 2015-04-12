@@ -102,5 +102,39 @@ module.exports = function(notes) {
 		});
 	});
 
+	api.put('/notes/:id', function(req, res) {
+		notes.updateNoteById(req.params.id, req.body, function(err, note) {
+			if (err)
+			{
+				res.statusCode = 404;
+				res.send(JSON.stringify({
+					"message": "Note with id: " + req.params.id + " not found!"
+				}));
+			}
+			else
+			{
+				res.statusCode = 204;
+				res.end();
+			}
+		});
+	});
+
+	api.delete('/notes/:id', function(req, res) {
+		notes.deleteNoteById(req.params.id, function(err) {
+			if (err)
+			{
+				res.statusCode = 404;
+				res.send(JSON.stringify({
+					"message": "Note with id: " + req.params.id + " not found!"
+				}));
+			}
+			else
+			{
+				res.statusCode = 204;
+				res.end();
+			}
+		});
+	});
+
 	return api;
 };
