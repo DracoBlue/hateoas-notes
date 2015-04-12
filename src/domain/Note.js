@@ -15,4 +15,19 @@ Note.prototype.getId = function()
 	return this.data.id;
 };
 
+Note.prototype.getTitle = function()
+{
+	return this.data.title || '';
+};
+
+Note.prototype.getDescription = function()
+{
+	return this.data.description || '';
+};
+
+Note.prototype.getTags = function()
+{
+	return this.data.tags || [];
+};
+
 module.exports = Note;
