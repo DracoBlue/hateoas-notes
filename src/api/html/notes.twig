@@ -1,0 +1,77 @@
+{% extends "_base.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h1>Notes</h1>
+
+    <ol class="breadcrumb">
+        <li><a href="{{ req.generateUrl("/") }}">Home</a></li>
+        <li class="active">Notes</li>
+    </ol>
+
+    <table class="table table-hover">
+        <thead>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Tags</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for note in notes %}
+            <tr>
+                <th scope="row">{{ note.id }}</th>
+                <td>{{ note.title }}</td>
+                <td>{{ note.tags | join (', ') }}</td>
+                <td><a class="btn btn-xs btn-primary" href="{{ req.generateUrl("/notes/" ~ note.id) }}">edit</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <nav class="text-center">
+        <ul class="pagination ">
+            {% if first_url %}
+                <li class="previous">
+                    <a href="{{ first_url }}" aria-label="First">
+                        <span aria-hidden="true"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> 1</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if prev_url %}
+            <li>
+                <a href="{{ prev_url }}" aria-label="Previous">
+                    <span aria-hidden="true"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="active"><a href="{{ self_url }}">{{ currentPage }} / {{ totalPagesCount }}</a></li>
+            {% if next_url %}
+            <li>
+                <a href="{{ next_url }}" aria-label="Next">
+                    <span aria-hidden="true"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></span>
+                </a>
+            </li>
+            {% endif %}
+            {% if last_url %}
+                <li class="next">
+                    <a href="{{ next_url }}" aria-label="Last">
+                        <span aria-hidden="true">{{ totalPagesCount }} <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <nav class="text-right">
+        <form class="form-inline" action="{{ self_url }}" method="GET">
+            <div class="form-group">
+                <label for="inputTitle">Items per Page</label>
+                <select name="limit" class="form-control">
+                    {% for i in 1..100 %}
+                        <option value="{{ i }}"{% if limit == i %} selected="selected"{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default">Refresh</button>
+        </form>
+    </nav>
+{% endblock %}

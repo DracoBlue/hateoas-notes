@@ -36,6 +36,8 @@
   "dependencies": {
     "body-parser": "^1.12.2",
     "express": "^4.9.0",
-    "node-uuid": "^1.4.3"
+    "method-override": "^2.3.2",
+    "node-uuid": "^1.4.3",
+    "twig": "^0.8.2"
   }
 }

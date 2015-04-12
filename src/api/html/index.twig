@@ -1,0 +1,55 @@
+{% extends "_base.twig" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block body %}
+    <h2>hateoas-notes in HTML</h2>
+
+    <ol class="breadcrumb">
+        <li class="active">Home</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 id="thumbnail-label">List of notes</h3>
+                    <p>You can see all available notes.</p>
+                    <p><a href="{{ req.generateUrl('/notes') }}" class="btn btn-primary" role="button">Notes</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 id="thumbnail-label">Create note</h3>
+                    <p>You can submit a new note.</p>
+                    <p><a href="{{ req.generateUrl('/create-note') }}" class="btn btn-primary" role="button">Create note</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>About hateoas-notes</h2>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 id="thumbnail-label">What is this?</h3>
+                    <p>This is the HTML-Version of the hateoas-notes project by DracoBlue. The project is open source and tries to implement a simple notes application in lots of different hypermedia formats.</p>
+                    <p><a href="https://github.com/DracoBlue/hateoas-notes" class="btn btn-default" role="button">Github</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 id="thumbnail-label">Other Versions</h3>
+                    <p>The HTML-Version is not the only version. You may play with an other format or contribute a new format at <a href="https://github.com/DracoBlue/hateoas-notes">Github</a>.</p>
+                    <p><a href="{{ req.generateUrl('/../hal') }}" class="btn btn-default" role="button">HAL</a> <a href="https://github.com/DracoBlue/hateoas-notes" class="btn btn-default" role="button">Contribute at Github</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
