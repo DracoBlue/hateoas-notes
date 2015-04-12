@@ -34,6 +34,20 @@ Notes.prototype.updateNoteById = function(id, data, callback)
 	}
 };
 
+
+Notes.prototype.deleteNoteById = function(id, callback)
+{
+	if (this.notes[id])
+	{
+		delete this.notes[id];
+		callback(false);
+	}
+	else
+	{
+		callback(true);
+	}
+};
+
 Notes.prototype.countNotes = function(callback)
 {
 	var totalCount = 0;
