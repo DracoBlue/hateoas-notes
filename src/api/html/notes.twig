@@ -24,11 +24,35 @@
                 <td>{{ note.title }}</td>
                 <td>{{ note.tags | join (', ') }}</td>
                 <td>
-                    <form class="form-inline" action="{{ req.generateUrl("/notes/" ~ note.id ~ "?_method=delete") }}" method="POST">
-                        {# FIXME: Actually this link shouldn't be in this form. But I can't get it inline. Any fix for this? #}
-                        <a class="btn btn-xs btn-primary" href="{{ req.generateUrl("/notes/" ~ note.id) }}">edit</a>
-                        <button type="submit" class="btn btn-xs btn-danger">delete</button>
-                    </form>
+
+                    <a class="btn btn-xs btn-primary" href="{{ req.generateUrl("/notes/" ~ note.id) }}">edit</a>
+
+                    <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal{{ note.id }}">
+                        Delete
+                    </button>
+
+                    <div class="modal fade" id="deleteModal{{ note.id }}" tabindex="-1" role="dialog" aria-labelledby="myModal{{ note.id }}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModal{{ note.id }}Label">Delete Note</h4>
+                                </div>
+                                <div class="modal-body">
+                                    Do you really want to delete Note #{{ note.id }}?
+                                </div>
+                                <form action="{{ req.generateUrl("/notes/" ~ note.id ~ "?_method=delete") }}" method="POST">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-danger">Delete Note</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </td>
             </tr>
         {% endfor %}
