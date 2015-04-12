@@ -33,6 +33,14 @@ app.get('/', function(req, res) {
 	res.end();
 });
 
+app.get('/robots.txt', function(req, res) {
+	res.setHeader('Content-Type', 'text/plain');
+	res.send([
+		'User-Agent: *',
+		'Allow: /'
+	].join("\n"));
+});
+
 /* Launch server */
 
 app.listen((process.env.PORT || 3000), (process.env.HOST || '0.0.0.0'));
