@@ -20,6 +20,20 @@ Notes.prototype.getNoteById = function(id, callback)
 	}
 };
 
+Notes.prototype.updateNoteById = function(id, data, callback)
+{
+	if (this.notes[id])
+	{
+		data["id"] = id;
+		this.notes[id] = data;
+		callback(false, new Note(this.notes[id]));
+	}
+	else
+	{
+		callback(true);
+	}
+};
+
 Notes.prototype.countNotes = function(callback)
 {
 	var totalCount = 0;
