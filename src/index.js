@@ -29,7 +29,7 @@ app.set('twig options', {
 
 app.get('/', function(req, res) {
 	res.statusCode = 302;
-	res.setHeader('Location', 'https://github.com/DracoBlue/hateoas-notes');
+	res.setHeader('Location', '/api/html');
 	res.end();
 });
 
