@@ -1,6 +1,6 @@
 {% extends "_base.twig" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}List of notes{% endblock %}
 
 {% block body %}
     <h1>Notes</h1>
@@ -23,7 +23,13 @@
                 <th scope="row">{{ note.id }}</th>
                 <td>{{ note.title }}</td>
                 <td>{{ note.tags | join (', ') }}</td>
-                <td><a class="btn btn-xs btn-primary" href="{{ req.generateUrl("/notes/" ~ note.id) }}">edit</a></td>
+                <td>
+                    <form class="form-inline" action="{{ req.generateUrl("/notes/" ~ note.id ~ "?_method=delete") }}" method="POST">
+                        {# FIXME: Actually this link shouldn't be in this form. But I can't get it inline. Any fix for this? #}
+                        <a class="btn btn-xs btn-primary" href="{{ req.generateUrl("/notes/" ~ note.id) }}">edit</a>
+                        <button type="submit" class="btn btn-xs btn-danger">delete</button>
+                    </form>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

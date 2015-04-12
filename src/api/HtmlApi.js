@@ -23,23 +23,14 @@ module.exports = function(notes) {
 
 	api.get('/', function(req, res) {
 		res.render('index', {
-			"req": req,
-			"title": "hateoas-notes.HTML",
-			"createNoteUrl": req.generateUrl('/notes')
+			"req": req
 		});
-		//res.send(JSON.stringify({
-		//	"_links": {
-		//		"http://hateoas-notes/rels/notes": {"href": req.generateUrl('/notes')},
-		//		"http://hateoas-notes/rels/create-note": {"href": req.generateUrl('/notes')}
-		//	}
-		//}));
 	});
 
 
 	api.get('/create-note', function(req, res) {
 		res.render('createNote', {
 			"req": req,
-			"title": "Create Note",
 			"createNoteUrl": req.generateUrl('/notes')
 		});
 	});
@@ -56,7 +47,6 @@ module.exports = function(notes) {
 
 				res.render("notes", {
 					"req": req,
-					"title": "List of notes",
 					"notes": notes,
 					"currentPage": Math.floor(offset/limit) + 1,
 					"totalPagesCount": Math.ceil(totalCount / limit),
@@ -88,16 +78,16 @@ module.exports = function(notes) {
 			if (err)
 			{
 				res.statusCode = 404;
-				res.send(JSON.stringify({
-					"message": "Note with id: " + req.params.id + " not found!"
-				}));
+				res.render('notFound', {
+					"req": req
+				});
 			}
 			else
 			{
 				res.render('note', {
 					"req": req,
-					"title": "Note #" + note.getId(),
 					"note": note,
+					"successAlert": "Note #" + note.getId() + " updated.",
 					"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
 				});
 			}
@@ -128,21 +118,39 @@ module.exports = function(notes) {
 			if (err)
 			{
 				res.statusCode = 404;
-				res.send(JSON.stringify({
-					"message": "Note with id: " + req.params.id + " not found!"
-				}));
+				res.render('notFound', {
+					"req": req
+				});
 			}
 			else
 			{
 				res.render('note', {
 					"req": req,
-					"title": "Note #" + note.getId(),
 					"note": note,
 					"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
 				});
 			}
 		});
 	});
+
+	api.delete('/notes/:id', function(req, res) {
+		notes.deleteNoteById(req.params.id, function(err) {
+			if (err)
+			{
+				res.statusCode = 404;
+				res.render('notFound', {
+					"req": req
+				});
+			}
+			else
+			{
+				res.statusCode = 302;
+				res.setHeader('Location', req.generateUrl("/notes"));
+				res.end();
+			}
+		});
+	});
+
 
 	return api;
 };

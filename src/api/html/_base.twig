@@ -47,6 +47,11 @@
 </nav>
 
 <div class="container" role="main">
+
+{% if successAlert is defined %}
+    <div class="alert alert-success" role="alert">{{ successAlert }}</div>
+{% endif %}
+
 {% block body %}
 {% endblock %}
 </div>
