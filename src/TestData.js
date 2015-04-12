@@ -17,6 +17,14 @@ module.exports = function(notes) {
 		{
 			"title": "Lord of flies",
 			"tags": ["books"]
+		},
+		{
+			"title": "REST in Practice",
+			"tags": ["books"]
+		},
+		{
+			"title": "Domain Driven Design",
+			"tags": ["books"]
 		}
 	], function() {
 
