@@ -11,6 +11,15 @@ hateoas-client.js is copyright 2015 by DracoBlue <http://dracoblue.net>
 The basic idea of this project is to create a given example application with multiple media types, to evaluate which one
 fits best for which use case.
 
+Currently supported media types:
+
+* HTML (Hypertext Markup Language)
+  * Supported Features: Note, Note List, Note Creation, Note Update, Note Removal
+  * Demo-System: <http://hateoas-notes.herokuapp.com/api/html>
+* HAL (Hypertext Application Language)
+  * Supported Features: Note, Note List, Note Creation, Note Update, Note Removal 
+  * Demo-System: <http://hateoas-notes.herokuapp.com/api/hal> ([HAL-Browser](haltalk.herokuapp.com/explorer/browser.html#http://hateoas-notes.herokuapp.com/api/hal))
+
 ## HateoasNotesApp Domain
 
 The HateoasNotesApp has the following given domain.
@@ -67,10 +76,16 @@ Will create a new `Note`.
 
 ### Note Update
 
+* needs a `Note`
 * has a title
 * has a description
 * can be public/private
 * has tags
+* needs `User Authentication` to validate the owner or editor
+
+### Note Removal
+
+* needs a `Note`
 * needs `User Authentication` to validate the owner or editor
 
 ### Editors
