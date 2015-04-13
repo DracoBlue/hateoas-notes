@@ -13,10 +13,10 @@ fits best for which use case.
 
 Currently supported media types:
 
-* HTML (Hypertext Markup Language)
+* [HTML](http://www.w3.org/html/) (Hypertext Markup Language)
   * Supported Features: Note, Note List, Note Creation, Note Update, Note Removal
   * Demo-System: <http://hateoas-notes.herokuapp.com/api/html>
-* HAL (Hypertext Application Language)
+* [HAL](http://stateless.co/hal_specification.html) (Hypertext Application Language)
   * Supported Features: Note, Note List, Note Creation, Note Update, Note Removal 
   * Demo-System: <http://hateoas-notes.herokuapp.com/api/hal> ([HAL-Browser](haltalk.herokuapp.com/explorer/browser.html#http://hateoas-notes.herokuapp.com/api/hal))
 
