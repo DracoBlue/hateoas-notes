@@ -52,21 +52,23 @@ module.exports = function(notes) {
 				var hasNextPage = notes.length > limit ? true : false;
 				notes.splice(limit, 1);
 
-				notes.forEach(function(note) {
-					halNotes.push(noteToHal(req, note));
-				});
-
 				var halResponse = {
 					"_links": {
 						"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)},
 						"self": {"href": req.generateUrl('/notes?offset=' + offset + '&limit=' + limit)},
 						"up": {"href": req.generateUrl("/")},
-						"last": {"href": req.generateUrl('/notes?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)}
+						"last": {"href": req.generateUrl('/notes?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)},
+						"http://hateoas-notes/rels/note": []
 					},
 					"_embedded": {
-						"http://hateoas-notes/rels/note": halNotes
+						"http://hateoas-notes/rels/note": []
 					}
 				};
+
+				notes.forEach(function(note) {
+					halResponse["_embedded"]["http://hateoas-notes/rels/note"].push(noteToHal(req, note));
+					halResponse["_links"]["http://hateoas-notes/rels/note"].push({"href": req.generateUrl("/notes/" + note.getId())});
+				});
 
 				if (hasNextPage)
 				{
