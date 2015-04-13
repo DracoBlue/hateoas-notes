@@ -3,11 +3,13 @@ var app = express();
 
 var Notes = require('./domain/Notes');
 var notes = new Notes();
+var Users = require('./domain/Users');
+var users = new Users();
 
 /* inject test data */
 
 var TestData = require('./TestData');
-TestData(notes);
+TestData(notes, users);
 
 /* HAL Api */
 

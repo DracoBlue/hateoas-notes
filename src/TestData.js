@@ -1,6 +1,12 @@
 "use strict";
 
-module.exports = function(notes) {
+module.exports = function(notes, users) {
+	users.createUser({
+		"username": "test",
+		"password": "password"
+	}, function() {
+
+	});
 	notes.createNotes([
 		{
 			"title": "Apples",
