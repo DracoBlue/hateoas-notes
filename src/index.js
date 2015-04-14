@@ -1,10 +1,18 @@
 var express = require('express');
 var app = express();
+var cors = require('cors')
 
 var Notes = require('./domain/Notes');
 var notes = new Notes();
 var Users = require('./domain/Users');
 var users = new Users();
+
+/* enable cors */
+
+app.use(cors({
+	"credentials": true,
+	"origin": true
+}));
 
 /* inject test data */
 
