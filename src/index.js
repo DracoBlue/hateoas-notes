@@ -51,6 +51,11 @@ app.get('/robots.txt', function(req, res) {
 	].join("\n"));
 });
 
-/* Launch server */
-
-app.listen((process.env.PORT || 3000), (process.env.HOST || '0.0.0.0'));
+if (module && module.exports)
+{
+	module.exports = app;
+}
+else
+{
+	app.listen((process.env.PORT || 3000), (process.env.HOST || '0.0.0.0'));
+}
