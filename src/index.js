@@ -22,7 +22,7 @@ TestData(notes, users);
 /* HAL Api */
 
 var halApi = require('./api/HalApi');
-app.use('/api/hal', halApi(notes));
+app.use('/api/hal', halApi(notes, users));
 
 /* HTML Api */
 

@@ -1,12 +1,68 @@
 "use strict";
 
-module.exports = function(notes) {
+module.exports = function(notes, users) {
 	var express = require('express');
 	var url = require('url');
 	var bodyParser = require('body-parser');
+	var auth = require('basic-auth');
 	var api = express.Router();
+	var UserAuthentication = require('./../domain/UserAuthentication');
+	var HalUsersApi = require('./hal/HalUsers');
+	var HalNotesApi = require('./hal/HalNotes');
 
-	api.use(bodyParser.json())
+	api.use(bodyParser.json());
+
+	api.param('existingNoteId', function (req, res, next, existingNoteId) {
+		notes.getNoteById(existingNoteId, function(err, note) {
+			if (err)
+			{
+				res.statusCode = 404;
+				res.json({
+					"message": "Note with id: " + existingNoteId + " not found!"
+				});
+			}
+			else
+			{
+				req.params.existingNote = note;
+				next();
+			}
+		});
+	});
+
+	var ensureAuthentication = function(req, res, next) {
+		var credentials = auth(req);
+		var handleAuthenticationError = function() {
+			res.writeHead(401, {
+				'Www-Authenticate': 'Basic realm="example"',
+				'Content-Type': 'text/html'
+			});
+			res.end()
+		};
+
+		if (credentials) {
+			users.getUserByUsername(credentials.name, function(err, user) {
+				if (!err)
+				{
+					var authentication = new UserAuthentication(user, credentials.pass);
+
+					if (authentication.getPasswordHash() == user.getPasswordHash())
+					{
+						req.getUser = function()
+						{
+							return user;
+						};
+
+						next();
+						return ;
+					}
+				}
+
+				handleAuthenticationError();
+			});
+		} else {
+			handleAuthenticationError();
+		}
+	};
 
 	api.use(function(req, res, next) {
 		res.set('Content-Type', 'application/hal+json');
@@ -29,116 +85,14 @@ module.exports = function(notes) {
 		var halResponse = {"_links": {}};
 		halResponse["_links"][req.generateVendorRel("notes")] = {"href": req.generateUrl('/notes')};
 		halResponse["_links"][req.generateVendorRel("create-note")] = {"href": req.generateUrl('/notes')};
+		halResponse["_links"][req.generateVendorRel("users")] = {"href": req.generateUrl('/users')};
+		halResponse["_links"][req.generateVendorRel("register-user")] = {"href": req.generateUrl('/users')};
 
 		res.send(JSON.stringify(halResponse));
 	});
 
-	var noteToHal = function(req, note) {
-		var halNote = note.toJSON();
-		halNote["_links"] = {
-			"self": {"href": req.generateUrl("/notes/" + note.getId())},
-			"up": {"href": req.generateUrl("/notes")}
-		};
-
-		return halNote;
-	};
-
-	api.get('/notes', function(req, res) {
-		var offset = parseInt(req.query.offset || 0, 10);
-		var limit = parseInt(req.query.limit || 20, 10);
-
-		notes.countNotes(function(err, totalCount) {
-			notes.getNotesByOffsetAndLimit(offset, limit + 1, function(err, notes) {
-				var halNotes = [];
-				var hasNextPage = notes.length > limit ? true : false;
-				notes.splice(limit, 1);
-
-				var halResponse = {
-					"_links": {
-						"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)},
-						"self": {"href": req.generateUrl('/notes?offset=' + offset + '&limit=' + limit)},
-						"up": {"href": req.generateUrl("/")},
-						"last": {"href": req.generateUrl('/notes?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)},
-					},
-					"_embedded": {
-					}
-				};
-
-				halResponse["_links"][req.generateVendorRel("note")] = [];
-				halResponse["_embedded"][req.generateVendorRel("note")] = [];
-
-				notes.forEach(function(note) {
-					halResponse["_embedded"][req.generateVendorRel("note")].push(noteToHal(req, note));
-					halResponse["_links"][req.generateVendorRel("note")].push({"href": req.generateUrl("/notes/" + note.getId())});
-				});
-
-				if (hasNextPage)
-				{
-					halResponse["_links"].next = {"href": req.generateUrl('/notes?offset=' + (limit + offset) + '&limit=' + limit)};
-				}
-
-				res.send(JSON.stringify(halResponse));
-			});
-		});
-	});
-
-	api.post('/notes', function(req, res) {
-		notes.createNote(req.body, function(err, note) {
-			res.statusCode = 201;
-			res.setHeader('Location', req.generateUrl("/notes/" + note.getId()));
-			res.end();
-		});
-	});
-
-	api.get('/notes/:id', function(req, res) {
-		notes.getNoteById(req.params.id, function(err, note) {
-			if (err)
-			{
-				res.statusCode = 404;
-				res.send(JSON.stringify({
-					"message": "Note with id: " + req.params.id + " not found!"
-				}));
-			}
-			else
-			{
-				res.send(JSON.stringify(noteToHal(req, note)));
-			}
-		});
-	});
-
-	api.put('/notes/:id', function(req, res) {
-		notes.updateNoteById(req.params.id, req.body, function(err, note) {
-			if (err)
-			{
-				res.statusCode = 404;
-				res.send(JSON.stringify({
-					"message": "Note with id: " + req.params.id + " not found!"
-				}));
-			}
-			else
-			{
-				res.statusCode = 204;
-				res.end();
-			}
-		});
-	});
-
-	api.delete('/notes/:id', function(req, res) {
-		notes.deleteNoteById(req.params.id, function(err) {
-			if (err)
-			{
-				res.statusCode = 404;
-				res.send(JSON.stringify({
-					"message": "Note with id: " + req.params.id + " not found!"
-				}));
-			}
-			else
-			{
-				res.statusCode = 204;
-				res.end();
-			}
-		});
-	});
+	api.use(HalUsersApi(ensureAuthentication, users));
+	api.use(HalNotesApi(ensureAuthentication, notes));
 
 	return api;
 };
