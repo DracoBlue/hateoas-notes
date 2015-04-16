@@ -124,7 +124,7 @@ module.exports = function(ensureAuthentication, notes) {
 		var note = req.params.existingNote;
 		if (note.getOwnerId() != req.getUser().getId())
 		{
-			res.statusCode = 404;
+			res.statusCode = 403;
 			res.send(JSON.stringify({
 				"message": "You are not owner of the note with id: " + note.getId() + "!"
 			}));

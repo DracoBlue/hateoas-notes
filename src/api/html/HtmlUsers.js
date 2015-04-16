@@ -4,6 +4,23 @@ module.exports = function(users) {
 	var express = require('express');
 	var api = express.Router();
 
+	api.param('existingUserId', function (req, res, next, existingUserId) {
+		users.getUserById(existingUserId, function(err, user) {
+			if (err)
+			{
+				res.statusCode = 404;
+				res.render('notFound', {
+					"req": req
+				});
+			}
+			else
+			{
+				req.params.existingUser = user;
+				next();
+			}
+		});
+	});
+
 	api.get('/register-user', function(req, res) {
 		res.render('registerUser', {
 			"req": req,
@@ -46,41 +63,21 @@ module.exports = function(users) {
 		});
 	});
 
-	api.get('/users/:id', function(req, res) {
-		users.getUserById(req.params.id, function(err, user) {
-			if (err)
-			{
-				res.statusCode = 404;
-				res.render('notFound', {
-					"req": req
-				});
-			}
-			else
-			{
-				res.render('user', {
-					"req": req,
-					"user": user,
-					"updateUserUrl": req.generateUrl('/users/' + user.getId() + '?_method=put')
-				});
-			}
+	api.get('/users/:existingUserId', function(req, res) {
+		var user = req.params.existingUser;
+		res.render('user', {
+			"req": req,
+			"user": user,
+			"updateUserUrl": req.generateUrl('/users/' + user.getId() + '?_method=put')
 		});
 	});
 
-	api.delete('/users/:id', function(req, res) {
-		users.deleteUserById(req.params.id, function(err) {
-			if (err)
-			{
-				res.statusCode = 404;
-				res.render('notFound', {
-					"req": req
-				});
-			}
-			else
-			{
-				res.statusCode = 302;
-				res.setHeader('Location', req.generateUrl("/users"));
-				res.end();
-			}
+	api.delete('/users/:existingUserId', function(req, res) {
+		var user = req.params.existingUser;
+		users.deleteUserById(user.getId(), function(err) {
+			res.statusCode = 302;
+			res.setHeader('Location', req.generateUrl("/users"));
+			res.end();
 		});
 	});
 

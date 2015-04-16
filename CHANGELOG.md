@@ -2,6 +2,7 @@
 
 ## dev
 
+* html: refactored into existingUserId and existingNoteId version
 * html: added basic user management
 * html: refactored HtmlNotesApi into extra js file
 * added extra start.js script

@@ -4,6 +4,23 @@ module.exports = function(notes) {
 	var express = require('express');
 	var api = express.Router();
 
+	api.param('existingNoteId', function (req, res, next, existingNoteId) {
+		notes.getNoteById(existingNoteId, function(err, note) {
+			if (err)
+			{
+				res.statusCode = 404;
+				res.json({
+					"message": "Note with id: " + existingNoteId + " not found!"
+				});
+			}
+			else
+			{
+				req.params.existingNote = note;
+				next();
+			}
+		});
+	});
+
 	api.get('/create-note', function(req, res) {
 		res.render('createNote', {
 			"req": req,
@@ -38,7 +55,8 @@ module.exports = function(notes) {
 		});
 	});
 
-	api.put('/notes/:id', function(req, res) {
+	api.put('/notes/:existingNoteId', function(req, res) {
+		var note = req.params.existingNote;
 		var body = req.body;
 		body.tags = (body.tags || '').trim();
 		if (body.tags == '')
@@ -50,11 +68,11 @@ module.exports = function(notes) {
 			body.tags = body.tags.replace(/([\s]*,[\s]*)/g, ',').split(',');
 		}
 
-		notes.updateNoteById(req.params.id, body, function(err, note) {
+		notes.updateNoteById(note.getId(), body, function(err, note) {
 			if (err)
 			{
-				res.statusCode = 404;
-				res.render('notFound', {
+				res.statusCode = 500;
+				res.render('internalError', {
 					"req": req
 				});
 			}
@@ -109,12 +127,13 @@ module.exports = function(notes) {
 		});
 	});
 
-	api.delete('/notes/:id', function(req, res) {
-		notes.deleteNoteById(req.params.id, function(err) {
+	api.delete('/notes/:existingNoteId', function(req, res) {
+		var note = req.params.existingNote;
+		notes.deleteNoteById(note.getId(), function(err) {
 			if (err)
 			{
-				res.statusCode = 404;
-				res.render('notFound', {
+				res.statusCode = 500;
+				res.render('internalError', {
 					"req": req
 				});
 			}
