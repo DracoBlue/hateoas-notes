@@ -36,7 +36,7 @@
             <div class="col-sm-10">
                 <select type="text" class="form-control select2" id="inputOwner" placeholder="Owner" name="owner" value="{{ note.owner }}">
                     {% for user in users %}
-                    <option value="{{ note.ownerId }}" {% if note.ownerId == user.id %}selected="selected"{% endif %}>{{ user.username }}</option>
+                    <option value="{{ user.id }}" {% if note.ownerId == user.id %}selected="selected"{% endif %}>{{ user.username }}</option>
                     {% endfor %})
                 </select>
             </div>

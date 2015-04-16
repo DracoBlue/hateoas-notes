@@ -2,6 +2,7 @@
 
 ## dev
 
+* html: fixed owner id for note
 * html: added logic to update owner of a note
 * html: added internal owner and user authentication for notes
 * html: refactored into existingUserId and existingNoteId version
