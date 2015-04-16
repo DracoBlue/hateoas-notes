@@ -78,7 +78,7 @@ module.exports = function(ensureAuthentication, notes) {
 	api.post('/notes', ensureAuthentication, function(req, res) {
 		var noteData = req.body;
 		noteData.owner = req.getUser().getId();
-		notes.createNote(req.body, function(err, note) {
+		notes.createNote(noteData, function(err, note) {
 			res.statusCode = 201;
 			res.setHeader('Location', req.generateUrl("/notes/" + note.getId()));
 			res.end();

@@ -4,5 +4,9 @@
 
 {% block body %}
     <h2>Not Found</h2>
-    <p>Cannot find the specific page.</p>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <p>Cannot find the specific page.</p>
+    {% endif %}
 {% endblock %}

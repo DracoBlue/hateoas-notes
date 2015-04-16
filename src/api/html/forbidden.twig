@@ -1,12 +1,12 @@
 {% extends "_base.twig" %}
 
-{% block title %}Internal Error{% endblock %}
+{% block title %}Forbidden{% endblock %}
 
 {% block body %}
-    <h2>Internal Error</h2>
+    <h2>Forbidden</h2>
     {% if message %}
         <p>{{ message }}</p>
     {% else %}
-        <p>Cannot execute this action.</p>
+        <p>You are not allowed to do this.</p>
     {% endif %}
 {% endblock %}

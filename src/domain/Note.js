@@ -30,4 +30,9 @@ Note.prototype.getTags = function()
 	return this.data.tags || [];
 };
 
+Note.prototype.getOwnerId = function()
+{
+	return this.data.owner;
+}
+
 module.exports = Note;

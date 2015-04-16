@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(notes) {
+module.exports = function(ensureAuthentication, notes) {
 	var express = require('express');
 	var api = express.Router();
 
@@ -9,7 +9,8 @@ module.exports = function(notes) {
 			if (err)
 			{
 				res.statusCode = 404;
-				res.json({
+				res.render('notFound', {
+					"req": req,
 					"message": "Note with id: " + existingNoteId + " not found!"
 				});
 			}
@@ -21,7 +22,7 @@ module.exports = function(notes) {
 		});
 	});
 
-	api.get('/create-note', function(req, res) {
+	api.get('/create-note', ensureAuthentication, function(req, res) {
 		res.render('createNote', {
 			"req": req,
 			"createNoteUrl": req.generateUrl('/notes')
@@ -55,7 +56,7 @@ module.exports = function(notes) {
 		});
 	});
 
-	api.put('/notes/:existingNoteId', function(req, res) {
+	api.put('/notes/:existingNoteId', ensureAuthentication, function(req, res) {
 		var note = req.params.existingNote;
 		var body = req.body;
 		body.tags = (body.tags || '').trim();
@@ -68,28 +69,40 @@ module.exports = function(notes) {
 			body.tags = body.tags.replace(/([\s]*,[\s]*)/g, ',').split(',');
 		}
 
-		notes.updateNoteById(note.getId(), body, function(err, note) {
-			if (err)
-			{
-				res.statusCode = 500;
-				res.render('internalError', {
-					"req": req
-				});
-			}
-			else
-			{
-				res.render('note', {
-					"req": req,
-					"note": note,
-					"successAlert": "Note #" + note.getId() + " updated.",
-					"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
-				});
-			}
-		});
+		if (note.getOwnerId() != req.getUser().getId())
+		{
+			res.statusCode = 403;
+			res.render('forbidden', {
+				"req": req,
+				"message": "You are not owner of the note with id: " + note.getId() + "!"
+			});
+		}
+		else {
+			body.owner = req.getUser().getId();
+
+			notes.updateNoteById(note.getId(), body, function (err, note) {
+				if (err) {
+					res.statusCode = 500;
+					res.render('internalError', {
+						"req": req,
+						"message": "Cannot update the note with id: " + note.getId() + '!'
+					});
+				}
+				else {
+					res.render('note', {
+						"req": req,
+						"note": note,
+						"successAlert": "Note #" + note.getId() + " updated.",
+						"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
+					});
+				}
+			});
+		}
 	});
 
-	api.post('/notes', function(req, res) {
+	api.post('/notes', ensureAuthentication, function(req, res) {
 		var body = req.body;
+		body.owner = req.getUser().getId();
 		body.tags = body.tags.trim();
 		if (body.tags == '')
 		{
@@ -107,43 +120,44 @@ module.exports = function(notes) {
 		});
 	});
 
-	api.get('/notes/:id', function(req, res) {
-		notes.getNoteById(req.params.id, function(err, note) {
-			if (err)
-			{
-				res.statusCode = 404;
-				res.render('notFound', {
-					"req": req
-				});
-			}
-			else
-			{
-				res.render('note', {
-					"req": req,
-					"note": note,
-					"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
-				});
-			}
+	api.get('/notes/:existingNoteId', function(req, res) {
+		var note = req.params.existingNote;
+		res.render('note', {
+			"req": req,
+			"note": note,
+			"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
 		});
 	});
 
 	api.delete('/notes/:existingNoteId', function(req, res) {
 		var note = req.params.existingNote;
-		notes.deleteNoteById(note.getId(), function(err) {
-			if (err)
-			{
-				res.statusCode = 500;
-				res.render('internalError', {
-					"req": req
-				});
-			}
-			else
-			{
-				res.statusCode = 302;
-				res.setHeader('Location', req.generateUrl("/notes"));
-				res.end();
-			}
-		});
+		if (note.getOwnerId() != req.getUser().getId())
+		{
+			res.statusCode = 403;
+			res.render('forbidden', {
+				"req": req,
+				"message": "You are not owner of the note with id: " + note.getId() + "!"
+			});
+		}
+		else
+		{
+			notes.deleteNoteById(req.params.id, function(err) {
+				if (err)
+				{
+					res.statusCode = 500;
+					res.render('internalError', {
+						"req": req,
+						"message": "Cannot delete the note with id: " + note.getId() + '!'
+					});
+				}
+				else
+				{
+					res.statusCode = 302;
+					res.setHeader('Location', req.generateUrl("/notes"));
+					res.end();
+				}
+			});
+		}
 	});
 
 	return api;

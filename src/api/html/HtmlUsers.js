@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(users) {
+module.exports = function(ensureAuthentication, users) {
 	var express = require('express');
 	var api = express.Router();
 
@@ -10,7 +10,8 @@ module.exports = function(users) {
 			{
 				res.statusCode = 404;
 				res.render('notFound', {
-					"req": req
+					"req": req,
+					"message": "User with id " + existingUserId + ' not found!'
 				});
 			}
 			else
@@ -72,13 +73,35 @@ module.exports = function(users) {
 		});
 	});
 
-	api.delete('/users/:existingUserId', function(req, res) {
+	api.delete('/users/:existingUserId', ensureAuthentication, function(req, res) {
 		var user = req.params.existingUser;
-		users.deleteUserById(user.getId(), function(err) {
-			res.statusCode = 302;
-			res.setHeader('Location', req.generateUrl("/users"));
-			res.end();
-		});
+		if (req.getUser().getId() != user.getId())
+		{
+			res.statusCode = 403;
+			res.render('forbidden', {
+				"req": req,
+				"message": "Not allowed to delete the user with id: " + user.getId() + "!"
+			});
+		}
+		else
+		{
+			users.deleteUserById(user.getId(), function(err) {
+				if (err)
+				{
+					res.statusCode = 500;
+					res.render('internalError', {
+						"req": req,
+						"message": "Cannot delete the user with id: " + user.getId() + '!'
+					});
+				}
+				else
+				{
+					res.statusCode = 302;
+					res.setHeader('Location', req.generateUrl("/users"));
+					res.end();
+				}
+			});
+		}
 	});
 
 	return api;
