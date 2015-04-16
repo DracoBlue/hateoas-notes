@@ -93,6 +93,21 @@ Users.prototype.getUsersByOffsetAndLimit = function(offset, limit, callback)
 	callback(false, users);
 };
 
+Users.prototype.getAllUsers = function(callback)
+{
+	var users = [];
+
+	for (var id in this.users)
+	{
+		if (this.users.hasOwnProperty(id))
+		{
+			users.push(new User(this.users[id]));
+		}
+	}
+
+	callback(false, users);
+};
+
 Users.prototype.createUser = function(userData, callback)
 {
 	var that = this;

@@ -14,7 +14,7 @@ fits best for which use case.
 Currently supported media types:
 
 * [HTML](http://www.w3.org/html/) (Hypertext Markup Language)
-  * Supported Features: Note, Note Tags, Note List, Note Creation, Note Update, Note Removal, User, User Authentication, User Registration, User Removal
+  * Supported Features: Note, Note Tags, Note List, Note Creation, Note Update, Note Removal, User, User Authentication, User Registration, User Removal, Note Owner
   * Demo-System: <http://hateoas-notes.herokuapp.com/api/html>
 * [HAL](http://stateless.co/hal_specification.html) (Hypertext Application Language)
   * Supported Features: Note, Note Tags, Note List, Note Creation, Note Update, Note Removal, User, User Authentication, User Registration, User Removal, Note Owner

@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(ensureAuthentication, notes) {
+module.exports = function(ensureAuthentication, notes, users) {
 	var express = require('express');
 	var api = express.Router();
 
@@ -78,22 +78,40 @@ module.exports = function(ensureAuthentication, notes) {
 			});
 		}
 		else {
-			body.owner = req.getUser().getId();
+			var ownerId = body.owner || req.getUser().getId();
 
-			notes.updateNoteById(note.getId(), body, function (err, note) {
-				if (err) {
-					res.statusCode = 500;
-					res.render('internalError', {
+			users.getUserById(ownerId, function(err, owner) {
+				if (err)
+				{
+					res.statusCode = 400;
+					res.render('badRequest', {
 						"req": req,
-						"message": "Cannot update the note with id: " + note.getId() + '!'
+						"message": "Cannot find owner with the id: " + ownerId + '!'
 					});
 				}
-				else {
-					res.render('note', {
-						"req": req,
-						"note": note,
-						"successAlert": "Note #" + note.getId() + " updated.",
-						"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
+				else
+				{
+					body.owner = owner.getId();
+
+					notes.updateNoteById(note.getId(), body, function (err, note) {
+						if (err) {
+							res.statusCode = 500;
+							res.render('internalError', {
+								"req": req,
+								"message": "Cannot update the note with id: " + note.getId() + '!'
+							});
+						}
+						else {
+							users.getAllUsers(function(err, users) {
+								res.render('note', {
+									"req": req,
+									"note": note,
+									"users": users,
+									"successAlert": "Note #" + note.getId() + " updated.",
+									"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
+								});
+							});
+						}
 					});
 				}
 			});
@@ -122,10 +140,14 @@ module.exports = function(ensureAuthentication, notes) {
 
 	api.get('/notes/:existingNoteId', function(req, res) {
 		var note = req.params.existingNote;
-		res.render('note', {
-			"req": req,
-			"note": note,
-			"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
+
+		users.getAllUsers(function(err, users) {
+			res.render('note', {
+				"req": req,
+				"note": note,
+				"users": users,
+				"updateNoteUrl": req.generateUrl('/notes/' + note.getId() + '?_method=put')
+			});
 		});
 	});
 

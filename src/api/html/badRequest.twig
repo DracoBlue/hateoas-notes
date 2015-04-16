@@ -1,0 +1,12 @@
+{% extends "_base.twig" %}
+
+{% block title %}Bad Request{% endblock %}
+
+{% block body %}
+    <h2>Bad Request</h2>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <p>Cannot execute this action.</p>
+    {% endif %}
+{% endblock %}

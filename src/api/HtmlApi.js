@@ -67,7 +67,7 @@ module.exports = function(notes, users) {
 		});
 	});
 
-	api.use(HtmlNotesApi(ensureAuthentication, notes));
+	api.use(HtmlNotesApi(ensureAuthentication, notes, users));
 	api.use(HtmlUsersApi(ensureAuthentication, users));
 
 	return api;
