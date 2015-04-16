@@ -10,7 +10,16 @@
     </ol>
 
     <div class="row">
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-3 col-md-3">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 id="thumbnail-label">Register user</h3>
+                    <p>Create a new user account.</p>
+                    <p><a href="{{ req.generateUrl('/register-user') }}" class="btn btn-primary" role="button">Register user</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-md-3">
             <div class="thumbnail">
                 <div class="caption">
                     <h3 id="thumbnail-label">List of notes</h3>
@@ -19,12 +28,21 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-md-6">
+        <div class="col-sm-3 col-md-3">
             <div class="thumbnail">
                 <div class="caption">
                     <h3 id="thumbnail-label">Create note</h3>
                     <p>You can submit a new note.</p>
                     <p><a href="{{ req.generateUrl('/create-note') }}" class="btn btn-primary" role="button">Create note</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3 col-md-3">
+            <div class="thumbnail">
+                <div class="caption">
+                    <h3 id="thumbnail-label">List of users</h3>
+                    <p>You can see all available users.</p>
+                    <p><a href="{{ req.generateUrl('/users') }}" class="btn btn-primary" role="button">Users</a></p>
                 </div>
             </div>
         </div>

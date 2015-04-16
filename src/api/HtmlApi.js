@@ -1,12 +1,13 @@
 "use strict";
 
-module.exports = function(notes) {
+module.exports = function(notes, users) {
 	var express = require('express');
 	var url = require('url');
 	var bodyParser = require('body-parser');
 	var methodOverride = require('method-override')
 	var api = express.Router();
 	var HtmlNotesApi = require('./html/HtmlNotes');
+	var HtmlUsersApi = require('./html/HtmlUsers');
 
 	api.use(bodyParser.urlencoded({ extended: false }));
 	api.use(methodOverride('_method'));
@@ -29,6 +30,7 @@ module.exports = function(notes) {
 	});
 
 	api.use(HtmlNotesApi(notes));
+	api.use(HtmlUsersApi(users));
 
 	return api;
 };

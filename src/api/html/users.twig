@@ -1,0 +1,105 @@
+{% extends "_base.twig" %}
+
+{% block title %}List of users{% endblock %}
+
+{% block body %}
+    <h1>Users</h1>
+
+    <ol class="breadcrumb">
+        <li><a href="{{ req.generateUrl("/") }}">Home</a></li>
+        <li class="active">Users</li>
+    </ol>
+
+    <table class="table table-hover">
+        <thead>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <th scope="row">{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>
+
+                    <a class="btn btn-xs btn-primary" href="{{ req.generateUrl("/users/" ~ user.id) }}">view</a>
+
+                    <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#deleteModal{{ user.id }}">
+                        Delete
+                    </button>
+
+                    <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="myModal{{ user.id }}Label" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModal{{ user.id }}Label">Delete User</h4>
+                                </div>
+                                <div class="modal-body">
+                                    Do you really want to delete User #{{ user.id }}?
+                                </div>
+                                <form action="{{ req.generateUrl("/users/" ~ user.id ~ "?_method=delete") }}" method="POST">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-danger">Delete User</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <nav class="text-center">
+        <ul class="pagination ">
+            {% if first_url %}
+                <li class="previous">
+                    <a href="{{ first_url }}" aria-label="First">
+                        <span aria-hidden="true"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> 1</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if prev_url %}
+            <li>
+                <a href="{{ prev_url }}" aria-label="Previous">
+                    <span aria-hidden="true"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="active"><a href="{{ self_url }}">{{ currentPage }} / {{ totalPagesCount }}</a></li>
+            {% if next_url %}
+            <li>
+                <a href="{{ next_url }}" aria-label="Next">
+                    <span aria-hidden="true"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></span>
+                </a>
+            </li>
+            {% endif %}
+            {% if last_url %}
+                <li class="next">
+                    <a href="{{ next_url }}" aria-label="Last">
+                        <span aria-hidden="true">{{ totalPagesCount }} <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    <nav class="text-right">
+        <form class="form-inline" action="{{ self_url }}" method="GET">
+            <div class="form-group">
+                <label for="inputTitle">Items per Page</label>
+                <select name="limit" class="form-control">
+                    {% for i in 1..100 %}
+                        <option value="{{ i }}"{% if limit == i %} selected="selected"{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-default">Refresh</button>
+        </form>
+    </nav>
+{% endblock %}

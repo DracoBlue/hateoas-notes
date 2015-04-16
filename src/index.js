@@ -27,7 +27,7 @@ app.use('/api/hal', halApi(notes, users));
 /* HTML Api */
 
 var htmlApi = require('./api/HtmlApi');
-app.use('/api/html', htmlApi(notes));
+app.use('/api/html', htmlApi(notes, users));
 
 app.set('views', __dirname + '/api/html');
 app.set('view engine', 'twig');

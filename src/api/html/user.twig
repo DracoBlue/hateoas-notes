@@ -1,0 +1,23 @@
+{% extends "_base.twig" %}
+
+{% block title %}User #{{ user.id }}{% endblock %}
+
+
+{% block body %}
+    <h1>User #{{ user.id }}</h1>
+
+    <ol class="breadcrumb">
+        <li><a href="{{ req.generateUrl("/") }}">Home</a></li>
+        <li><a href="{{ req.generateUrl("/users") }}">Users</a></li>
+        <li class="active">{{ user.username }}</li>
+    </ol>
+
+    <ul>
+        <li>Username: {{ user.username }}</li>
+        <li>Id: {{ user.id }}</li>
+    </ul>
+    <div>
+        Currently you can only view this user here. No more actions are possible.
+    </div>
+
+{% endblock %}

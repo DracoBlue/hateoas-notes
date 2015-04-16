@@ -2,6 +2,7 @@
 
 ## dev
 
+* html: added basic user management
 * html: refactored HtmlNotesApi into extra js file
 * added extra start.js script
 * hal: added tests for `/api/hal/users` and `/api/hal/users/:id`
