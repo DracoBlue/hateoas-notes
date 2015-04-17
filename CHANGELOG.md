@@ -2,6 +2,7 @@
 
 ## dev
 
+* html: added select2
 * html: fixed owner id for note
 * html: added logic to update owner of a note
 * html: added internal owner and user authentication for notes
