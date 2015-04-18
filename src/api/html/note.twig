@@ -4,11 +4,11 @@
 
 
 {% block body %}
-    <h1>Note #{{ note.id }}</h1>
+    <h1><a rel="self" href="{{ req.generateUrl("/notes/" ~ note.id) }}">Note #{{ note.id }}</a></h1>
 
     <ol class="breadcrumb">
         <li><a href="{{ req.generateUrl("/") }}">Home</a></li>
-        <li><a href="{{ req.generateUrl("/notes") }}">Notes</a></li>
+        <li><a rel="up" href="{{ req.generateUrl("/notes") }}">Notes</a></li>
         <li class="active">{{ note.id }}</li>
     </ol>
 

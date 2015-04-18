@@ -6,7 +6,7 @@
     <h1>Notes</h1>
 
     <ol class="breadcrumb">
-        <li><a href="{{ req.generateUrl("/") }}">Home</a></li>
+        <li><a rel="up" href="{{ req.generateUrl("/") }}">Home</a></li>
         <li class="active">Notes</li>
     </ol>
 
@@ -66,29 +66,29 @@
         <ul class="pagination ">
             {% if first_url %}
                 <li class="previous">
-                    <a href="{{ first_url }}" aria-label="First">
+                    <a href="{{ first_url }}" aria-label="First" rel="first">
                         <span aria-hidden="true"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span> 1</span>
                     </a>
                 </li>
             {% endif %}
             {% if prev_url %}
             <li>
-                <a href="{{ prev_url }}" aria-label="Previous">
+                <a href="{{ prev_url }}" aria-label="Previous" rel="prev">
                     <span aria-hidden="true"><span class="glyphicon glyphicon-backward" aria-hidden="true"></span></span>
                 </a>
             </li>
             {% endif %}
-            <li class="active"><a href="{{ self_url }}">{{ currentPage }} / {{ totalPagesCount }}</a></li>
+            <li class="active"><a rel="self" href="{{ self_url }}">{{ currentPage }} / {{ totalPagesCount }}</a></li>
             {% if next_url %}
             <li>
-                <a href="{{ next_url }}" aria-label="Next">
+                <a href="{{ next_url }}" aria-label="Next" rel="next">
                     <span aria-hidden="true"><span class="glyphicon glyphicon-forward" aria-hidden="true"></span></span>
                 </a>
             </li>
             {% endif %}
             {% if last_url %}
                 <li class="next">
-                    <a href="{{ next_url }}" aria-label="Last">
+                    <a href="{{ next_url }}" aria-label="Last" rel="last">
                         <span aria-hidden="true">{{ totalPagesCount }} <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></span>
                     </a>
                 </li>
