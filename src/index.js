@@ -11,7 +11,8 @@ var users = new Users();
 
 app.use(cors({
 	"credentials": true,
-	"origin": true
+	"origin": true,
+	"methods": ["GET","HEAD","PUT","PATCH","POST","DELETE", "OPTIONS"]
 }));
 
 /* inject test data */
