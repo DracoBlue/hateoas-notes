@@ -103,12 +103,12 @@ module.exports = function(ensureAuthentication, notes) {
 		{
 			var noteData = req.body;
 			noteData.owner = req.getUser().getId();
-			notes.updateNoteById(req.params.id, req.body, function(err, note) {
+			notes.updateNoteById(note.getId(), req.body, function(err, note) {
 				if (err)
 				{
 					res.statusCode = 500;
 					res.send(JSON.stringify({
-						"message": "Cannot update the note with id: " + req.params.id + "!"
+						"message": "Cannot update the note with id: " + note.getId() + "!"
 					}));
 				}
 				else

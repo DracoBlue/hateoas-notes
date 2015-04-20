@@ -2,6 +2,7 @@
 
 ## dev
 
+* hal: fixed getId in put notes api
 * hal: fixed getId in delete notes api
 * html: added some rel's
 * html: added select2
