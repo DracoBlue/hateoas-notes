@@ -13,7 +13,7 @@ app.use(cors({
 	"credentials": true,
 	"origin": true,
 	"methods": ["GET","HEAD","PUT","PATCH","POST","DELETE", "OPTIONS"],
-	"exposedHeaders": ["Server", "Content-Type", "Allow", "X-Powered-By", "Link"],
+	"exposedHeaders": ["Server", "Content-Type", "Allow", "X-Powered-By", "Link", "Location"],
     "preflightContinue": true
 }));
 
