@@ -12,7 +12,9 @@ var users = new Users();
 app.use(cors({
 	"credentials": true,
 	"origin": true,
-	"methods": ["GET","HEAD","PUT","PATCH","POST","DELETE", "OPTIONS"]
+	"methods": ["GET","HEAD","PUT","PATCH","POST","DELETE", "OPTIONS"],
+	"exposedHeaders": ["Server", "Content-Type", "Allow", "X-Powered-By", "Link"],
+    "preflightContinue": true
 }));
 
 /* inject test data */
