@@ -131,12 +131,12 @@ module.exports = function(ensureAuthentication, notes) {
 		}
 		else
 		{
-			notes.deleteNoteById(req.params.id, function(err) {
+			notes.deleteNoteById(note.getId(), function(err) {
 				if (err)
 				{
 					res.statusCode = 500;
 					res.send(JSON.stringify({
-						"message": "Cannot delete the not with id: " + req.params.id + "!"
+						"message": "Cannot delete the note with id: " + note.getId() + "!"
 					}));
 				}
 				else
