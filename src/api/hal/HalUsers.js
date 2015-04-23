@@ -25,7 +25,7 @@ module.exports = function(ensureAuthentication, users) {
 		var halUser = user.toJSON();
 		halUser["_links"] = {
 			"self": {"href": req.generateUrl("/users/" + user.getId())},
-			"up": {"href": req.generateUrl("/users")}
+			"up": {"href": req.generateUrl("/users"), "title": "User Index"}
 		};
 
 		return halUser;
@@ -44,8 +44,8 @@ module.exports = function(ensureAuthentication, users) {
 					"_links": {
 						"first": {"href": req.generateUrl('/users?offset=0&limit=' + limit)},
 						"self": {"href": req.generateUrl('/users?offset=' + offset + '&limit=' + limit)},
-						"up": {"href": req.generateUrl("/")},
-						"last": {"href": req.generateUrl('/users?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)},
+						"up": {"href": req.generateUrl("/"), "title": "Api Index"},
+						"last": {"href": req.generateUrl('/users?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)}
 					},
 					"_embedded": {
 					}
@@ -56,7 +56,7 @@ module.exports = function(ensureAuthentication, users) {
 
 				users.forEach(function(user) {
 					halResponse["_embedded"][req.generateVendorRel("user")].push(userToHal(req, user));
-					halResponse["_links"][req.generateVendorRel("user")].push({"href": req.generateUrl("/users/" + user.getId())});
+					halResponse["_links"][req.generateVendorRel("user")].push({"href": req.generateUrl("/users/" + user.getId()), "title": user.getUsername()});
 				});
 
 				if (hasNextPage)

@@ -83,10 +83,10 @@ module.exports = function(notes, users) {
 
 	api.get('/', function(req, res) {
 		var halResponse = {"_links": {}};
-		halResponse["_links"][req.generateVendorRel("notes")] = {"href": req.generateUrl('/notes')};
-		halResponse["_links"][req.generateVendorRel("create-note")] = {"href": req.generateUrl('/notes')};
-		halResponse["_links"][req.generateVendorRel("users")] = {"href": req.generateUrl('/users')};
-		halResponse["_links"][req.generateVendorRel("register-user")] = {"href": req.generateUrl('/users')};
+		halResponse["_links"][req.generateVendorRel("notes")] = {"href": req.generateUrl('/notes'), "title": "All Notes"};
+		halResponse["_links"][req.generateVendorRel("create-note")] = {"href": req.generateUrl('/notes'), "title": "Create a new Note"};
+		halResponse["_links"][req.generateVendorRel("users")] = {"href": req.generateUrl('/users'), "title": "All Users"};
+		halResponse["_links"][req.generateVendorRel("register-user")] = {"href": req.generateUrl('/users'), "title": "Register a User"};
 
 		res.send(JSON.stringify(halResponse));
 	});

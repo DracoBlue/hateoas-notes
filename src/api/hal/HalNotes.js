@@ -25,11 +25,11 @@ module.exports = function(ensureAuthentication, notes) {
 		var halNote = note.toJSON();
 		halNote["_links"] = {
 			"self": {"href": req.generateUrl("/notes/" + note.getId())},
-			"up": {"href": req.generateUrl("/notes")}
+			"up": {"href": req.generateUrl("/notes"), "title": "Notes Index"}
 		};
 		if (halNote["owner"])
 		{
-			halNote["_links"][req.generateVendorRel("owner")] = {"href": req.generateUrl("/users/" + halNote["owner"]), "title": null}
+			halNote["_links"][req.generateVendorRel("owner")] = {"href": req.generateUrl("/users/" + halNote["owner"])}
 			delete halNote["owner"];
 		}
 
@@ -50,7 +50,7 @@ module.exports = function(ensureAuthentication, notes) {
 					"_links": {
 						"first": {"href": req.generateUrl('/notes?offset=0&limit=' + limit)},
 						"self": {"href": req.generateUrl('/notes?offset=' + offset + '&limit=' + limit)},
-						"up": {"href": req.generateUrl("/")},
+						"up": {"href": req.generateUrl("/"), "title": "Api Index"},
 						"last": {"href": req.generateUrl('/notes?offset=' + Math.floor(totalCount/limit) + '&limit=' + limit)},
 					},
 					"_embedded": {
@@ -62,7 +62,7 @@ module.exports = function(ensureAuthentication, notes) {
 
 				notes.forEach(function(note) {
 					halResponse["_embedded"][req.generateVendorRel("note")].push(noteToHal(req, note));
-					halResponse["_links"][req.generateVendorRel("note")].push({"href": req.generateUrl("/notes/" + note.getId())});
+					halResponse["_links"][req.generateVendorRel("note")].push({"href": req.generateUrl("/notes/" + note.getId()), "title": note.getTitle()});
 				});
 
 				if (hasNextPage)

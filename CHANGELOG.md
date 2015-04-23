@@ -2,6 +2,7 @@
 
 ## dev
 
+* hal: added title attributes to the links
 * added Location header to exposed headers
 * hal: fixed getId in put notes api
 * hal: fixed getId in delete notes api
