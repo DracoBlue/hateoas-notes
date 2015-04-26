@@ -2,6 +2,8 @@
 
 ## dev
 
+* use <https://github.com/DracoBlue/node-cors/tree/add-exposed-headers-to-options-request> to wait until
+  <https://github.com/troygoode/node-cors/pull/41> is part of the official node-cors lib
 * hal: use relative urls
 * hal: added title attributes to the links
 * added Location header to exposed headers
