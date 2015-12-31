@@ -4,7 +4,8 @@
   "main": "src/index.js",
   "scripts": {
     "test": "node_modules/mocha/bin/mocha",
-    "start": "node src/start.js"
+    "start": "node src/start.js",
+    "watch": "nodemon src/start.js"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,8 @@
   "devDependencies": {
     "hateoas-client": "^0.3.0",
     "mocha": "^2.2.4",
-    "supertest": "^0.15.0"
+    "supertest": "^0.15.0",
+    "hateoas-browser": "git+https://git@github.com/DracoBlue/hateoas-browser.git#gh-pages"
   },
   "dependencies": {
     "basic-auth": "^1.0.0",

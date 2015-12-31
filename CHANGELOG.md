@@ -2,6 +2,8 @@
 
 ## dev
 
+* added hateoas-browser as dev dependency
+* added watch script
 * use node-cors 2.6.0
 * hal: use relative urls
 * hal: added title attributes to the links
