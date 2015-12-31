@@ -10,7 +10,7 @@ module.exports = function(ensureAuthentication, users) {
 			{
 				res.statusCode = 404;
 				res.send(JSON.stringify({
-					"message": "User with id: " + req.params.id + " not found!"
+					"message": "User with id: " + existingUserId + " not found!"
 				}));
 			}
 			else
