@@ -28,7 +28,7 @@
     "url": "https://github.com/DracoBlue/hateoas-notes/issues"
   },
   "engines": {
-    "node": "0.12.x"
+    "node": "6.11.1"
   },
   "homepage": "https://github.com/DracoBlue/hateoas-notes",
   "devDependencies": {
